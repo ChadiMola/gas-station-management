@@ -1,0 +1,817 @@
+# Gas Station Management API Endpoints
+# ===================================
+
+# Authentication Endpoints
+# -----------------------
+
+## Login
+Method: POST
+URL: /api/auth/login
+Description: Authenticates a user and returns a session token
+Request Body:
+{
+  "email": "string",
+  "password": "string"
+}
+Response:
+{
+  "user": {
+    "id": "uuid",
+    "email": "string",
+    "name": "string",
+    "role": "admin" | "super_admin"
+  },
+  "session": {
+    "access_token": "string",
+    "refresh_token": "string",
+    "expires_at": "timestamp"
+  }
+}
+
+## Register
+Method: POST
+URL: /api/auth/register
+Description: Creates a new user account (admin only)
+Request Body:
+{
+  "email": "string",
+  "password": "string",
+  "name": "string",
+  "role": "admin" | "super_admin"
+}
+Response:
+{
+  "id": "uuid",
+  "email": "string",
+  "name": "string",
+  "role": "admin" | "super_admin",
+  "created_at": "timestamp"
+}
+
+## Logout
+Method: POST
+URL: /api/auth/logout
+Description: Invalidates the current session token
+Request Body: None
+Response:
+{
+  "success": true
+}
+
+## Get Current User
+Method: GET
+URL: /api/auth/user
+Description: Returns the currently authenticated user
+Request Body: None
+Response:
+{
+  "id": "uuid",
+  "email": "string",
+  "name": "string",
+  "role": "admin" | "super_admin"
+}
+
+# Pump Management Endpoints
+# ------------------------
+
+## Get All Pumps
+Method: GET
+URL: /api/pumps
+Description: Returns a list of all pumps
+Request Body: None
+Response:
+[
+  {
+    "id": "uuid",
+    "name": "string",
+    "fuel_type": "string",
+    "status": "available" | "in_use" | "maintenance",
+    "price_per_liter": "number",
+    "created_at": "timestamp",
+    "updated_at": "timestamp"
+  }
+]
+
+## Get Pump by ID
+Method: GET
+URL: /api/pumps/:id
+Description: Returns a specific pump by ID
+Request Body: None
+Response:
+{
+  "id": "uuid",
+  "name": "string",
+  "fuel_type": "string",
+  "status": "available" | "in_use" | "maintenance",
+  "price_per_liter": "number",
+  "created_at": "timestamp",
+  "updated_at": "timestamp"
+}
+
+## Create Pump
+Method: POST
+URL: /api/pumps
+Description: Creates a new pump
+Request Body:
+{
+  "name": "string",
+  "fuel_type": "string",
+  "status": "available" | "in_use" | "maintenance",
+  "price_per_liter": "number"
+}
+Response:
+{
+  "id": "uuid",
+  "name": "string",
+  "fuel_type": "string",
+  "status": "available" | "in_use" | "maintenance",
+  "price_per_liter": "number",
+  "created_at": "timestamp",
+  "updated_at": "timestamp"
+}
+
+## Update Pump
+Method: PUT
+URL: /api/pumps/:id
+Description: Updates an existing pump
+Request Body:
+{
+  "name": "string",
+  "fuel_type": "string",
+  "status": "available" | "in_use" | "maintenance",
+  "price_per_liter": "number"
+}
+Response:
+{
+  "id": "uuid",
+  "name": "string",
+  "fuel_type": "string",
+  "status": "available" | "in_use" | "maintenance",
+  "price_per_liter": "number",
+  "created_at": "timestamp",
+  "updated_at": "timestamp"
+}
+
+## Delete Pump
+Method: DELETE
+URL: /api/pumps/:id
+Description: Deletes a pump
+Request Body: None
+Response:
+{
+  "success": true
+}
+
+# Transaction Management Endpoints
+# -------------------------------
+
+## Get All Transactions
+Method: GET
+URL: /api/transactions
+Description: Returns a list of all transactions
+Query Parameters:
+  - start_date: "YYYY-MM-DD" (optional)
+  - end_date: "YYYY-MM-DD" (optional)
+  - pump_id: "uuid" (optional)
+Request Body: None
+Response:
+[
+  {
+    "id": "uuid",
+    "pump_id": "uuid",
+    "amount": "number",
+    "liters": "number",
+    "payment_method": "string",
+    "timestamp": "timestamp",
+    "created_at": "timestamp",
+    "updated_at": "timestamp"
+  }
+]
+
+## Get Transaction by ID
+Method: GET
+URL: /api/transactions/:id
+Description: Returns a specific transaction by ID
+Request Body: None
+Response:
+{
+  "id": "uuid",
+  "pump_id": "uuid",
+  "amount": "number",
+  "liters": "number",
+  "payment_method": "string",
+  "timestamp": "timestamp",
+  "created_at": "timestamp",
+  "updated_at": "timestamp"
+}
+
+## Create Transaction
+Method: POST
+URL: /api/transactions
+Description: Creates a new transaction
+Request Body:
+{
+  "pump_id": "uuid",
+  "amount": "number",
+  "liters": "number",
+  "payment_method": "string",
+  "timestamp": "timestamp" (optional, defaults to current time)
+}
+Response:
+{
+  "id": "uuid",
+  "pump_id": "uuid",
+  "amount": "number",
+  "liters": "number",
+  "payment_method": "string",
+  "timestamp": "timestamp",
+  "created_at": "timestamp",
+  "updated_at": "timestamp"
+}
+
+## Update Transaction
+Method: PUT
+URL: /api/transactions/:id
+Description: Updates an existing transaction
+Request Body:
+{
+  "pump_id": "uuid",
+  "amount": "number",
+  "liters": "number",
+  "payment_method": "string",
+  "timestamp": "timestamp"
+}
+Response:
+{
+  "id": "uuid",
+  "pump_id": "uuid",
+  "amount": "number",
+  "liters": "number",
+  "payment_method": "string",
+  "timestamp": "timestamp",
+  "created_at": "timestamp",
+  "updated_at": "timestamp"
+}
+
+## Delete Transaction
+Method: DELETE
+URL: /api/transactions/:id
+Description: Deletes a transaction
+Request Body: None
+Response:
+{
+  "success": true
+}
+
+# Inventory Management Endpoints
+# -----------------------------
+
+## Get All Inventory Items
+Method: GET
+URL: /api/inventory
+Description: Returns a list of all inventory items
+Query Parameters:
+  - category: "string" (optional)
+  - low_stock: "boolean" (optional, if true returns only items below threshold)
+Request Body: None
+Response:
+[
+  {
+    "id": "uuid",
+    "name": "string",
+    "category": "string",
+    "quantity": "number",
+    "unit_price": "number",
+    "supplier": "string",
+    "created_at": "timestamp",
+    "updated_at": "timestamp"
+  }
+]
+
+## Get Inventory Item by ID
+Method: GET
+URL: /api/inventory/:id
+Description: Returns a specific inventory item by ID
+Request Body: None
+Response:
+{
+  "id": "uuid",
+  "name": "string",
+  "category": "string",
+  "quantity": "number",
+  "unit_price": "number",
+  "supplier": "string",
+  "created_at": "timestamp",
+  "updated_at": "timestamp"
+}
+
+## Create Inventory Item
+Method: POST
+URL: /api/inventory
+Description: Creates a new inventory item
+Request Body:
+{
+  "name": "string",
+  "category": "string",
+  "quantity": "number",
+  "unit_price": "number",
+  "supplier": "string"
+}
+Response:
+{
+  "id": "uuid",
+  "name": "string",
+  "category": "string",
+  "quantity": "number",
+  "unit_price": "number",
+  "supplier": "string",
+  "created_at": "timestamp",
+  "updated_at": "timestamp"
+}
+
+## Update Inventory Item
+Method: PUT
+URL: /api/inventory/:id
+Description: Updates an existing inventory item
+Request Body:
+{
+  "name": "string",
+  "category": "string",
+  "quantity": "number",
+  "unit_price": "number",
+  "supplier": "string"
+}
+Response:
+{
+  "id": "uuid",
+  "name": "string",
+  "category": "string",
+  "quantity": "number",
+  "unit_price": "number",
+  "supplier": "string",
+  "created_at": "timestamp",
+  "updated_at": "timestamp"
+}
+
+## Delete Inventory Item
+Method: DELETE
+URL: /api/inventory/:id
+Description: Deletes an inventory item
+Request Body: None
+Response:
+{
+  "success": true
+}
+
+## Update Inventory Quantity
+Method: PATCH
+URL: /api/inventory/:id/quantity
+Description: Updates only the quantity of an inventory item
+Request Body:
+{
+  "quantity": "number"
+}
+Response:
+{
+  "id": "uuid",
+  "name": "string",
+  "category": "string",
+  "quantity": "number",
+  "unit_price": "number",
+  "supplier": "string",
+  "created_at": "timestamp",
+  "updated_at": "timestamp"
+}
+
+# Expense Management Endpoints
+# ---------------------------
+
+## Get All Expenses
+Method: GET
+URL: /api/expenses
+Description: Returns a list of all expenses
+Query Parameters:
+  - start_date: "YYYY-MM-DD" (optional)
+  - end_date: "YYYY-MM-DD" (optional)
+  - category: "string" (optional)
+Request Body: None
+Response:
+[
+  {
+    "id": "uuid",
+    "category": "string",
+    "amount": "number",
+    "description": "string",
+    "date": "YYYY-MM-DD",
+    "created_at": "timestamp",
+    "updated_at": "timestamp"
+  }
+]
+
+## Get Expense by ID
+Method: GET
+URL: /api/expenses/:id
+Description: Returns a specific expense by ID
+Request Body: None
+Response:
+{
+  "id": "uuid",
+  "category": "string",
+  "amount": "number",
+  "description": "string",
+  "date": "YYYY-MM-DD",
+  "created_at": "timestamp",
+  "updated_at": "timestamp"
+}
+
+## Create Expense
+Method: POST
+URL: /api/expenses
+Description: Creates a new expense
+Request Body:
+{
+  "category": "string",
+  "amount": "number",
+  "description": "string",
+  "date": "YYYY-MM-DD"
+}
+Response:
+{
+  "id": "uuid",
+  "category": "string",
+  "amount": "number",
+  "description": "string",
+  "date": "YYYY-MM-DD",
+  "created_at": "timestamp",
+  "updated_at": "timestamp"
+}
+
+## Update Expense
+Method: PUT
+URL: /api/expenses/:id
+Description: Updates an existing expense
+Request Body:
+{
+  "category": "string",
+  "amount": "number",
+  "description": "string",
+  "date": "YYYY-MM-DD"
+}
+Response:
+{
+  "id": "uuid",
+  "category": "string",
+  "amount": "number",
+  "description": "string",
+  "date": "YYYY-MM-DD",
+  "created_at": "timestamp",
+  "updated_at": "timestamp"
+}
+
+## Delete Expense
+Method: DELETE
+URL: /api/expenses/:id
+Description: Deletes an expense
+Request Body: None
+Response:
+{
+  "success": true
+}
+
+# Employee Management Endpoints
+# ----------------------------
+
+## Get All Employees
+Method: GET
+URL: /api/employees
+Description: Returns a list of all employees
+Request Body: None
+Response:
+[
+  {
+    "id": "uuid",
+    "name": "string",
+    "position": "string",
+    "contact": "string",
+    "salary": "number",
+    "hire_date": "YYYY-MM-DD",
+    "created_at": "timestamp",
+    "updated_at": "timestamp"
+  }
+]
+
+## Get Employee by ID
+Method: GET
+URL: /api/employees/:id
+Description: Returns a specific employee by ID
+Request Body: None
+Response:
+{
+  "id": "uuid",
+  "name": "string",
+  "position": "string",
+  "contact": "string",
+  "salary": "number",
+  "hire_date": "YYYY-MM-DD",
+  "created_at": "timestamp",
+  "updated_at": "timestamp"
+}
+
+## Create Employee
+Method: POST
+URL: /api/employees
+Description: Creates a new employee
+Request Body:
+{
+  "name": "string",
+  "position": "string",
+  "contact": "string",
+  "salary": "number",
+  "hire_date": "YYYY-MM-DD"
+}
+Response:
+{
+  "id": "uuid",
+  "name": "string",
+  "position": "string",
+  "contact": "string",
+  "salary": "number",
+  "hire_date": "YYYY-MM-DD",
+  "created_at": "timestamp",
+  "updated_at": "timestamp"
+}
+
+## Update Employee
+Method: PUT
+URL: /api/employees/:id
+Description: Updates an existing employee
+Request Body:
+{
+  "name": "string",
+  "position": "string",
+  "contact": "string",
+  "salary": "number",
+  "hire_date": "YYYY-MM-DD"
+}
+Response:
+{
+  "id": "uuid",
+  "name": "string",
+  "position": "string",
+  "contact": "string",
+  "salary": "number",
+  "hire_date": "YYYY-MM-DD",
+  "created_at": "timestamp",
+  "updated_at": "timestamp"
+}
+
+## Delete Employee
+Method: DELETE
+URL: /api/employees/:id
+Description: Deletes an employee
+Request Body: None
+Response:
+{
+  "success": true
+}
+
+# Reports Endpoints
+# ----------------
+
+## Get Sales Report
+Method: GET
+URL: /api/reports/sales
+Description: Returns a sales report for a specified period
+Query Parameters:
+  - start_date: "YYYY-MM-DD" (required)
+  - end_date: "YYYY-MM-DD" (required)
+  - group_by: "day" | "week" | "month" (optional, defaults to "day")
+Request Body: None
+Response:
+{
+  "total_sales": "number",
+  "total_liters": "number",
+  "period_start": "YYYY-MM-DD",
+  "period_end": "YYYY-MM-DD",
+  "data": [
+    {
+      "date": "YYYY-MM-DD",
+      "sales": "number",
+      "liters": "number",
+      "transactions": "number"
+    }
+  ]
+}
+
+## Get Expense Report
+Method: GET
+URL: /api/reports/expenses
+Description: Returns an expense report for a specified period
+Query Parameters:
+  - start_date: "YYYY-MM-DD" (required)
+  - end_date: "YYYY-MM-DD" (required)
+  - group_by: "category" | "day" | "month" (optional, defaults to "category")
+Request Body: None
+Response:
+{
+  "total_expenses": "number",
+  "period_start": "YYYY-MM-DD",
+  "period_end": "YYYY-MM-DD",
+  "data": [
+    {
+      "category": "string",
+      "amount": "number",
+      "percentage": "number"
+    }
+  ]
+}
+
+## Get Inventory Report
+Method: GET
+URL: /api/reports/inventory
+Description: Returns an inventory status report
+Query Parameters:
+  - low_stock_only: "boolean" (optional, defaults to false)
+Request Body: None
+Response:
+{
+  "total_items": "number",
+  "total_value": "number",
+  "low_stock_items": "number",
+  "data": [
+    {
+      "category": "string",
+      "items_count": "number",
+      "total_value": "number"
+    }
+  ],
+  "items": [
+    {
+      "id": "uuid",
+      "name": "string",
+      "category": "string",
+      "quantity": "number",
+      "unit_price": "number",
+      "total_value": "number",
+      "is_low_stock": "boolean"
+    }
+  ]
+}
+
+## Get Profit/Loss Report
+Method: GET
+URL: /api/reports/profit-loss
+Description: Returns a profit/loss report for a specified period
+Query Parameters:
+  - start_date: "YYYY-MM-DD" (required)
+  - end_date: "YYYY-MM-DD" (required)
+  - group_by: "day" | "week" | "month" (optional, defaults to "month")
+Request Body: None
+Response:
+{
+  "total_revenue": "number",
+  "total_expenses": "number",
+  "net_profit": "number",
+  "profit_margin": "number",
+  "period_start": "YYYY-MM-DD",
+  "period_end": "YYYY-MM-DD",
+  "data": [
+    {
+      "period": "string",
+      "revenue": "number",
+      "expenses": "number",
+      "profit": "number",
+      "margin": "number"
+    }
+  ]
+}
+
+# Database Management Endpoints
+# ----------------------------
+
+## Setup Database
+Method: GET
+URL: /api/setup-db
+Description: Initializes the database schema
+Request Body: None
+Response:
+{
+  "message": "Database setup complete"
+}
+
+## Create Supabase Functions
+Method: GET
+URL: /api/supabase-functions
+Description: Creates stored procedures for database initialization
+Request Body: None
+Response:
+{
+  "message": "Supabase functions created successfully"
+}
+
+## Execute Database Function
+Method: POST
+URL: /api/db/execute-function
+Description: Executes a stored database function
+Request Body:
+{
+  "function_name": "string",
+  "parameters": {} (optional)
+}
+Response:
+{
+  "success": true,
+  "result": {}
+}
+
+# Settings Endpoints
+# -----------------
+
+## Get Application Settings
+Method: GET
+URL: /api/settings
+Description: Returns application settings
+Request Body: None
+Response:
+{
+  "company_name": "string",
+  "address": "string",
+  "contact": "string",
+  "tax_rate": "number",
+  "currency": "string",
+  "theme": "light" | "dark" | "system",
+  "language": "string"
+}
+
+## Update Application Settings
+Method: PUT
+URL: /api/settings
+Description: Updates application settings
+Request Body:
+{
+  "company_name": "string",
+  "address": "string",
+  "contact": "string",
+  "tax_rate": "number",
+  "currency": "string",
+  "theme": "light" | "dark" | "system",
+  "language": "string"
+}
+Response:
+{
+  "company_name": "string",
+  "address": "string",
+  "contact": "string",
+  "tax_rate": "number",
+  "currency": "string",
+  "theme": "light" | "dark" | "system",
+  "language": "string"
+}
+
+# Export Endpoints
+# ---------------
+
+## Export Transactions
+Method: GET
+URL: /api/export/transactions
+Description: Exports transactions data in CSV or PDF format
+Query Parameters:
+  - start_date: "YYYY-MM-DD" (required)
+  - end_date: "YYYY-MM-DD" (required)
+  - format: "csv" | "pdf" (required)
+Request Body: None
+Response: Binary file (CSV or PDF)
+
+## Export Inventory
+Method: GET
+URL: /api/export/inventory
+Description: Exports inventory data in CSV or PDF format
+Query Parameters:
+  - format: "csv" | "pdf" (required)
+Request Body: None
+Response: Binary file (CSV or PDF)
+
+## Export Expenses
+Method: GET
+URL: /api/export/expenses
+Description: Exports expenses data in CSV or PDF format
+Query Parameters:
+  - start_date: "YYYY-MM-DD" (required)
+  - end_date: "YYYY-MM-DD" (required)
+  - format: "csv" | "pdf" (required)
+Request Body: None
+Response: Binary file (CSV or PDF)
+
+## Export Report
+Method: POST
+URL: /api/export/report
+Description: Exports a custom report in CSV or PDF format
+Request Body:
+{
+  "report_type": "sales" | "expenses" | "inventory" | "profit-loss",
+  "start_date": "YYYY-MM-DD",
+  "end_date": "YYYY-MM-DD",
+  "format": "csv" | "pdf",
+  "filters": {} (optional)
+}
+Response: Binary file (CSV or PDF)

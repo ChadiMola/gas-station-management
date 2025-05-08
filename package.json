@@ -1,0 +1,39 @@
+{
+    "name": "my-electron-app",
+    "version": "1.0.0",
+    "description": "A simple Electron application.",
+    "main": "Software/main.js",
+    "homepage": "https://example.com",        
+    "scripts": {
+      "start": "electron .",
+      "build": "electron-builder"
+    },
+    "keywords": [
+      "electron",
+      "app"
+    ],
+    "author": "Your Name",
+    "license": "MIT",
+    "devDependencies": {
+      "electron": "^36.0.0",
+      "electron-builder": "^26.0.12"
+    },
+    "build": {
+      "appId": "com.yourcompany.myelectronapp",
+      "productName": "MyElectronApp",
+      "directories": {
+        "output": "dist"
+      },
+      "files": [
+        "Software/**/*",
+        "node_modules/**/*",
+        "package.json"
+      ],
+      "linux": {
+        "target": ["AppImage", "deb"],
+        "category": "Utility",
+        "maintainer": "Your Name <you@example.com>"
+      }
+    }
+  }
+  
